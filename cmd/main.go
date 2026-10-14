@@ -10,10 +10,15 @@ import (
 	"github.com/DTrinadcat/go-todo"
 )
 
+const msgEmptyTask = "Failed to add task: name cannot be empty."
+
 func show(tl todo.TodoList) {
+
+	fmt.Println("-----------------------------")
 	for _, task := range tl {
 		fmt.Printf("%v | id: %v\n", task.Name, task.ID)
 	}
+	fmt.Println("-----------------------------")
 }
 
 func prompt(scanner *bufio.Scanner, message string) string {
@@ -23,7 +28,6 @@ func prompt(scanner *bufio.Scanner, message string) string {
 	scanner.Scan()
 
 	return scanner.Text()
-
 }
 
 func main() {
@@ -49,11 +53,12 @@ func main() {
 
 			userStr := prompt(scanner, "Enter task name: ")
 
-			// TODO Should be added an error throw or return to the loop if the user entered an empty string
+			_, err := tl.Add(userStr)
 
-			if userStr != "" {
-				tl.Add(userStr)
+			if err != nil {
+				fmt.Println(msgEmptyTask)
 			}
+
 		case "3": // Update
 			userStrID := prompt(scanner, "Enter task id: ")
 
@@ -63,9 +68,11 @@ func main() {
 
 			userStrName := prompt(scanner, "Enter task name: ")
 
-			// TODO Should be added an error throw or return to the loop if the user entered an empty string
+			err := tl.Update(id, userStrName)
 
-			tl.Update(id, userStrName)
+			if err != nil {
+				fmt.Println("Failed to update task: id does not exist")
+			}
 
 		case "4": // Delete
 			// TODO: DRY principle
@@ -74,7 +81,16 @@ func main() {
 
 			id, _ := uuid.Parse(userStrID) // TODO The error should be handled
 
-			tl.Delete(id)
+			err := tl.Delete(id)
+
+			if err != nil {
+				fmt.Println("Failed to delete task: id does not exist")
+			}
+		case "exit":
+			fmt.Println("Bye, Bye!")
+			return
+		default:
+			fmt.Println("Unknown command. Please try again")
 		}
 
 	}
