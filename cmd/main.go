@@ -10,6 +10,22 @@ import (
 	"github.com/DTrinadcat/go-todo"
 )
 
+func show(tl todo.TodoList) {
+	for _, task := range tl {
+		fmt.Printf("%v | id: %v\n", task.Name, task.ID)
+	}
+}
+
+func prompt(scanner *bufio.Scanner, message string) string {
+
+	fmt.Print(message)
+
+	scanner.Scan()
+
+	return scanner.Text()
+
+}
+
 func main() {
 	tl := todo.TodoList{}
 	scanner := bufio.NewScanner(os.Stdin)
@@ -28,13 +44,10 @@ func main() {
 
 		switch choice {
 		case "1": // Show
-			fmt.Println(tl)
+			show(tl)
 		case "2": // Add
-			fmt.Print("Enter task name: ")
 
-			scanner.Scan()
-
-			userStr := scanner.Text()
+			userStr := prompt(scanner, "Enter task name: ")
 
 			// TODO Should be added an error throw or return to the loop if the user entered an empty string
 
@@ -42,21 +55,13 @@ func main() {
 				tl.Add(userStr)
 			}
 		case "3": // Update
-			fmt.Print("Enter task id: ")
-
-			scanner.Scan()
-
-			userStrID := scanner.Text()
+			userStrID := prompt(scanner, "Enter task id: ")
 
 			id, _ := uuid.Parse(userStrID) // TODO The error should be handled
 
 			// TODO It should be checked whether the specified ID exist in tl
 
-			fmt.Print("Enter task name: ") // TODO DRY principle
-
-			scanner.Scan()
-
-			userStrName := scanner.Text()
+			userStrName := prompt(scanner, "Enter task name: ")
 
 			// TODO Should be added an error throw or return to the loop if the user entered an empty string
 
@@ -65,11 +70,7 @@ func main() {
 		case "4": // Delete
 			// TODO: DRY principle
 
-			fmt.Print("Enter task id: ")
-
-			scanner.Scan()
-
-			userStrID := scanner.Text()
+			userStrID := prompt(scanner, "Enter task id: ")
 
 			id, _ := uuid.Parse(userStrID) // TODO The error should be handled
 

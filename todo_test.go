@@ -10,7 +10,8 @@ func TestToDo(t *testing.T) {
 
 		tdList := TodoList{}
 
-		id := tdList.Add("Do homework")
+		// TODO: handle Error
+		id, _ := tdList.Add("Do homework")
 
 		got, err := tdList.Get(id)
 
@@ -30,7 +31,8 @@ func TestToDo(t *testing.T) {
 
 		tdList := TodoList{}
 
-		id := tdList.Add("Do homework")
+		// TODO: handle Error
+		id, _ := tdList.Add("Do homework")
 
 		err := tdList.Delete(id)
 
@@ -51,7 +53,8 @@ func TestToDo(t *testing.T) {
 	t.Run("Update task", func(t *testing.T) {
 		tdList := TodoList{}
 
-		id := tdList.Add("Do homework")
+		// TODO: handle Error
+		id, _ := tdList.Add("Do homework")
 
 		errUpdate := tdList.Update(id, "Do 13 homework")
 

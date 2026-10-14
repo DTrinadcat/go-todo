@@ -7,6 +7,9 @@ import (
 	"github.com/google/uuid"
 )
 
+var errTaskNotFind = errors.New("task not find")
+var errEmptyString = errors.New("String must not be empty")
+
 type Task struct {
 	Name string
 	ID   uuid.UUID
@@ -14,17 +17,19 @@ type Task struct {
 
 type TodoList []Task
 
-func (tl *TodoList) Add(text string) uuid.UUID {
+func (tl *TodoList) Add(text string) (uuid.UUID, error) {
+
+	if text == "" {
+		return uuid.Nil, errEmptyString
+	}
 
 	taskID := uuid.New()
 
 	task := Task{text, taskID}
 	*tl = append(*tl, task)
 
-	return taskID
+	return taskID, nil
 }
-
-var errTaskNotFind = errors.New("task not find")
 
 func (tl *TodoList) Get(id uuid.UUID) (Task, error) {
 
