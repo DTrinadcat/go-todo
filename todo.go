@@ -24,7 +24,7 @@ func (tl *TodoList) Add(text string) uuid.UUID {
 	return taskID
 }
 
-var ErrTaskNotFind = errors.New("task not find")
+var errTaskNotFind = errors.New("task not find")
 
 func (tl *TodoList) Get(id uuid.UUID) (Task, error) {
 
@@ -36,7 +36,7 @@ func (tl *TodoList) Get(id uuid.UUID) (Task, error) {
 
 	}
 
-	return Task{}, ErrTaskNotFind
+	return Task{}, errTaskNotFind
 
 }
 
@@ -56,7 +56,7 @@ func (tl *TodoList) Delete(id uuid.UUID) error {
 		return nil
 	}
 
-	return ErrTaskNotFind
+	return errTaskNotFind
 
 }
 
@@ -69,5 +69,5 @@ func (tl *TodoList) Update(id uuid.UUID, text string) error {
 		}
 	}
 
-	return ErrTaskNotFind
+	return errTaskNotFind
 }

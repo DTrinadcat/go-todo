@@ -40,7 +40,7 @@ func TestToDo(t *testing.T) {
 
 		_, got := tdList.Get(id)
 
-		want := ErrTaskNotFind
+		want := errTaskNotFind
 
 		if got != want {
 			t.Errorf("want: %v | got: %v", want, got)
