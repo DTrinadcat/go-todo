@@ -19,7 +19,7 @@ func TestToDo(t *testing.T) {
 			t.Errorf("got an error: %v", err)
 		}
 
-		want := Task{"Do homework", 1, id}
+		want := Task{"Do homework", id}
 
 		if got != want {
 			t.Errorf("want: %v | got: %v", want, got)
@@ -63,12 +63,12 @@ func TestToDo(t *testing.T) {
 			t.Errorf("got an error: %v", err)
 		}
 
-		thirdTask, _ := tdList.Get(id)
+		second := tdList[1]
 
-		want := 2
+		want := Task{"Do homework 3", id}
 
-		if thirdTask.Number != 2 {
-			t.Errorf("want: %v | got: %v", want, thirdTask.Number)
+		if want != second {
+			t.Errorf("want: %v | got: %v", want, second)
 		}
 
 	})
@@ -90,7 +90,7 @@ func TestToDo(t *testing.T) {
 			t.Errorf("got an error: %v", errUpdate)
 		}
 
-		want := Task{"Do 13 homework", 1, id}
+		want := Task{"Do 13 homework", id}
 
 		if got != want {
 			t.Errorf("want: %v | got: %v", want, got)
@@ -116,7 +116,7 @@ func TestToDo(t *testing.T) {
 			t.Errorf("got an error: %v", errUpdate)
 		}
 
-		want := Task{"Do mega homework", 2, id}
+		want := Task{"Do mega homework", id}
 
 		if got != want {
 			t.Errorf("want: %v | got: %v", want, got)

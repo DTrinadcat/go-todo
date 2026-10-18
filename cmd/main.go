@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/google/uuid"
 
@@ -28,11 +29,6 @@ func prompt(scanner *bufio.Scanner, message string) string {
 	scanner.Scan()
 
 	return scanner.Text()
-}
-
-func promptID(scanner *bufio.Scanner) (uuid.UUID, error) {
-	userInputID := prompt(scanner, "Enter task ID: ")
-	return uuid.Parse(userInputID)
 }
 
 func main() {
@@ -65,34 +61,68 @@ func main() {
 			}
 
 		case "3": // Update
-			id, errIDParsing := promptID(scanner)
+			userAns := prompt(scanner, "Enter Number or ID: ")
+			text := prompt(scanner, "Enter text: ")
 
-			if errIDParsing != nil {
-				fmt.Println("Invalid ID. Please try again")
+			num, errNum := strconv.Atoi(userAns)
+
+			if errNum == nil {
+
+				err := tl.UpdateByNumber(num, text)
+
+				if err != nil {
+					fmt.Println("Failed to update: id or number does not exist")
+				}
+
 				break
 			}
 
-			userStrName := prompt(scanner, "Enter task name: ")
+			id, errID := uuid.Parse(userAns)
 
-			err := tl.Update(id, userStrName)
+			if errID == nil {
 
-			if err != nil {
-				fmt.Println("Failed to update task: id does not exist")
+				err := tl.UpdateById(id, text)
+
+				if err != nil {
+					fmt.Println("Failed to update: id or number does not exist")
+				}
+
+				break
 			}
+
+			fmt.Println("Failed to delete: id or number does not exist")
 
 		case "4": // Delete
-			id, errIDParsing := promptID(scanner)
 
-			if errIDParsing != nil {
-				fmt.Println("Invalid ID. Please try again")
+			userAns := prompt(scanner, "Enter Number or ID: ")
+
+			num, errNum := strconv.Atoi(userAns)
+
+			if errNum == nil {
+
+				err := tl.DeleteByNumber(num)
+
+				if err != nil {
+					fmt.Println("Failed to delete: id or number does not exist")
+				}
+
 				break
 			}
 
-			err := tl.Delete(id)
+			id, errID := uuid.Parse(userAns)
 
-			if err != nil {
-				fmt.Println("Failed to delete task: id does not exist")
+			if errID == nil {
+				err := tl.DeleteByID(id)
+
+				if err != nil {
+					fmt.Println("Failed to delete: id or number does not exist")
+				}
+
+				break
 			}
+
+			fmt.Println("Failed to delete: id or number does not exist")
+
 		case "exit":
 			fmt.Println("Bye, Bye!")
 			return
