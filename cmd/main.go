@@ -30,6 +30,11 @@ func prompt(scanner *bufio.Scanner, message string) string {
 	return scanner.Text()
 }
 
+func promptID(scanner *bufio.Scanner) (uuid.UUID, error) {
+	userInputID := prompt(scanner, "Enter task ID: ")
+	return uuid.Parse(userInputID)
+}
+
 func main() {
 	tl := todo.TodoList{}
 	scanner := bufio.NewScanner(os.Stdin)
@@ -60,11 +65,12 @@ func main() {
 			}
 
 		case "3": // Update
-			userStrID := prompt(scanner, "Enter task id: ")
+			id, errIDParsing := promptID(scanner)
 
-			id, _ := uuid.Parse(userStrID) // TODO The error should be handled
-
-			// TODO It should be checked whether the specified ID exist in tl
+			if errIDParsing != nil {
+				fmt.Println("Invalid ID. Please try again")
+				break
+			}
 
 			userStrName := prompt(scanner, "Enter task name: ")
 
@@ -75,11 +81,12 @@ func main() {
 			}
 
 		case "4": // Delete
-			// TODO: DRY principle
+			id, errIDParsing := promptID(scanner)
 
-			userStrID := prompt(scanner, "Enter task id: ")
-
-			id, _ := uuid.Parse(userStrID) // TODO The error should be handled
+			if errIDParsing != nil {
+				fmt.Println("Invalid ID. Please try again")
+				break
+			}
 
 			err := tl.Delete(id)
 
