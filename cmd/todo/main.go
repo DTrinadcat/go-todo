@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strconv"
@@ -20,15 +19,6 @@ func show(tl todo.TodoList) {
 		fmt.Printf("%v | id: %v\n", task.Name, task.ID)
 	}
 	fmt.Println("-----------------------------")
-}
-
-func prompt(scanner *bufio.Scanner, message string) string {
-
-	fmt.Print(message)
-
-	scanner.Scan()
-
-	return scanner.Text()
 }
 
 func main() {

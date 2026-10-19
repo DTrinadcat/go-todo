@@ -1,6 +1,7 @@
 package todo
 
 import (
+	"path/filepath"
 	"testing"
 )
 
@@ -120,6 +121,25 @@ func TestToDo(t *testing.T) {
 
 		if got != want {
 			t.Errorf("want: %v | got: %v", want, got)
+		}
+
+	})
+
+	t.Run("check save and load", func(t *testing.T) {
+		tl := TodoList{}
+		path := filepath.Join(t.TempDir(), "test_todos.json")
+
+		tl.Add("1")
+		tl.Add("2")
+		tl.Add("3")
+
+		tl.SaveToFile(path)
+
+		tlCopy := TodoList{}
+		tlCopy.LoadFromFile(path)
+
+		if len(tlCopy) != len(tl) || len(tlCopy) != 3 {
+			t.Errorf("Failed to load %v", tl)
 		}
 
 	})

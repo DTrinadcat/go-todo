@@ -20,11 +20,7 @@ type Task struct {
 
 type TodoList []Task
 
-func (tl *TodoList) Load() error {
-
-	dir, _ := os.UserHomeDir()
-
-	path := filepath.Join(dir, ".todos.json")
+func (tl *TodoList) LoadFromFile(path string) error {
 
 	data, err := os.ReadFile(path)
 
@@ -34,17 +30,21 @@ func (tl *TodoList) Load() error {
 		}
 
 		return err
-
 	}
 
 	return json.Unmarshal(data, tl)
-}
 
-func (tl *TodoList) Save() error {
+}
+func (tl *TodoList) Load() error {
 
 	dir, _ := os.UserHomeDir()
 
 	path := filepath.Join(dir, ".todos.json")
+
+	return tl.LoadFromFile(path)
+}
+
+func (tl *TodoList) SaveToFile(path string) error {
 
 	data, err := json.Marshal(tl)
 
@@ -53,6 +53,15 @@ func (tl *TodoList) Save() error {
 	}
 
 	return os.WriteFile(path, data, 0644)
+}
+
+func (tl *TodoList) Save() error {
+
+	dir, _ := os.UserHomeDir()
+
+	path := filepath.Join(dir, ".todos.json")
+
+	return tl.SaveToFile(path)
 
 }
 
