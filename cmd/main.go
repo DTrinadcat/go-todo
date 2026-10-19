@@ -33,6 +33,7 @@ func prompt(scanner *bufio.Scanner, message string) string {
 
 func main() {
 	tl := todo.TodoList{}
+	tl.Load()
 	scanner := bufio.NewScanner(os.Stdin)
 
 	fmt.Println("Hello, this is your TODO List")
@@ -60,6 +61,8 @@ func main() {
 				fmt.Println(msgEmptyTask)
 			}
 
+			tl.Save()
+
 		case "3": // Update
 			userAns := prompt(scanner, "Enter Number or ID: ")
 			text := prompt(scanner, "Enter text: ")
@@ -74,6 +77,8 @@ func main() {
 					fmt.Println("Failed to update: id or number does not exist")
 				}
 
+				tl.Save()
+
 				break
 			}
 
@@ -86,6 +91,8 @@ func main() {
 				if err != nil {
 					fmt.Println("Failed to update: id or number does not exist")
 				}
+
+				tl.Save()
 
 				break
 			}
@@ -105,6 +112,7 @@ func main() {
 				if err != nil {
 					fmt.Println("Failed to delete: id or number does not exist")
 				}
+				tl.Save()
 
 				break
 			}
@@ -117,6 +125,8 @@ func main() {
 				if err != nil {
 					fmt.Println("Failed to delete: id or number does not exist")
 				}
+
+				tl.Save()
 
 				break
 			}

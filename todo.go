@@ -1,7 +1,10 @@
 package todo
 
 import (
+	"encoding/json"
 	"errors"
+	"os"
+	"path/filepath"
 	"slices"
 
 	"github.com/google/uuid"
@@ -16,6 +19,42 @@ type Task struct {
 }
 
 type TodoList []Task
+
+func (tl *TodoList) Load() error {
+
+	dir, _ := os.UserHomeDir()
+
+	path := filepath.Join(dir, ".todos.json")
+
+	data, err := os.ReadFile(path)
+
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
+
+		return err
+
+	}
+
+	return json.Unmarshal(data, tl)
+}
+
+func (tl *TodoList) Save() error {
+
+	dir, _ := os.UserHomeDir()
+
+	path := filepath.Join(dir, ".todos.json")
+
+	data, err := json.Marshal(tl)
+
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(path, data, 0644)
+
+}
 
 func (tl *TodoList) Add(text string) (uuid.UUID, error) {
 
